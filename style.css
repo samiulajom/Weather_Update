@@ -1,36 +1,359 @@
+/* =========================================================
+   Open Weather — Styles  (light green theme)
+   ========================================================= */
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --text: #15301c;
+  --muted: #4d6b55;
+  --glass: rgba(240, 251, 238, 0.55);
+  --glass-strong: rgba(240, 251, 238, 0.75);
+  --border: rgba(226, 245, 224, 0.9);
+  --accent: #2f9e5e;
+  --accent-2: #7bd48d;
+  --shadow: 0 24px 60px rgba(46, 110, 66, 0.22);
+  --radius: 24px;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  background: #d8fed7;
-}
-#left {
-  width: 50%;
-  height: 100vh;
-  display: flex;
+  min-height: 100%;
 }
 
-#right {
-  width: 50%;
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
   min-height: 100vh;
-  background: palegreen;
-}
-#branding {
-  width: 200px;
-  height: auto;
-}
-#condition {
-  width: 100px;
-  height: auto;
+  min-height: 100dvh;
+  /* calm green top -> mid -> soft green (very little white) */
+  background: linear-gradient(180deg, #7fc98e 0%, #9cdca6 55%, #c6ecc9 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (max-width: 300px) {
-  #left {
-    display: none !important;
+/* Decorative glow blobs */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::before {
+  width: 420px;
+  height: 420px;
+  background: #cdeed2;
+  opacity: 0.35;
+  top: -140px;
+  left: -120px;
+}
+
+body::after {
+  width: 380px;
+  height: 380px;
+  background: #9fe6aa;
+  opacity: 0.3;
+  bottom: -160px;
+  right: -120px;
+}
+
+/* ---------- Layout ---------- */
+.weather-app {
+  position: relative;
+  z-index: 1;
+}
+
+#row {
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+}
+
+#left,
+#right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.pane-inner {
+  width: 100%;
+  max-width: 520px;
+}
+
+/* ---------- Branding pane ---------- */
+#branding {
+  width: clamp(150px, 45%, 220px);
+  height: auto;
+  filter: drop-shadow(0 12px 22px rgba(46, 110, 66, 0.25));
+}
+
+.brand-title {
+  font-size: clamp(1.4rem, 4.2vw, 2.1rem);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin: 1rem 0 0.5rem;
+  background: linear-gradient(90deg, #14532d 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-sub {
+  color: var(--muted);
+  font-size: clamp(0.92rem, 2.6vw, 1.1rem);
+  max-width: 34ch;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ---------- Weather card ---------- */
+.weather-card {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: clamp(1.25rem, 5vw, 2.25rem);
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+}
+
+#condition {
+  width: clamp(88px, 26vw, 120px);
+  height: auto;
+  filter: drop-shadow(0 10px 16px rgba(46, 110, 66, 0.25));
+  animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
   }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.location {
+  font-size: clamp(1.1rem, 3.8vw, 1.45rem);
+  font-weight: 600;
+  margin: 0.5rem 0 0.15rem;
+  word-break: break-word;
+}
+
+.location .sep {
+  opacity: 0.6;
+  margin: 0 2px;
+}
+
+.temp-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#temp {
+  font-size: clamp(2.6rem, 13vw, 4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  background: linear-gradient(180deg, #14532d 0%, #2f9e5e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.condition-text {
+  margin: 0.25rem 0 1.25rem;
+  font-size: clamp(0.9rem, 3vw, 1rem);
+}
+
+.condition-text strong {
+  font-weight: 600;
+}
+
+.condition-text .desc {
+  color: var(--muted);
+}
+
+/* ---------- Stats ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.7rem 0.5rem;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.stat-value {
+  font-size: clamp(1rem, 3.6vw, 1.2rem);
+  font-weight: 600;
+  color: #14532d;
+}
+
+.stat-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Search ---------- */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.25rem 0.4rem 0.25rem 1rem;
+  background: #eef8ec;
+  border: 1px solid rgba(47, 158, 94, 0.18);
+  border-radius: 999px;
+  box-shadow: 0 10px 22px rgba(46, 110, 66, 0.16);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.search-box:focus-within {
+  box-shadow: 0 0 0 3px rgba(47, 158, 94, 0.28),
+    0 12px 26px rgba(46, 110, 66, 0.2);
+  transform: translateY(-1px);
+}
+
+.search-icon {
+  font-size: 0.95rem;
+  opacity: 0.55;
+  line-height: 1;
+}
+
+#city-input.form-control {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: #15301c;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.35rem 0.5rem 0;
+}
+
+#city-input.form-control:focus {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+#city-input::placeholder {
+  color: #6f8a78;
+}
+
+.form-text {
+  display: block;
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* ---------- History ---------- */
+#history {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+#history:empty {
+  margin-top: 0;
+}
+
+#history > * {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  background: var(--glass-strong);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+/* =========================================================
+   Responsive tweaks
+   ========================================================= */
+
+/* Desktop: subtle divider between the two panes */
+@media (min-width: 992px) {
+  #left {
+    border-right: 1px solid rgba(47, 158, 94, 0.16);
+  }
+}
+
+/* Small tablets / large phones: tone down the blobs */
+@media (max-width: 767.98px) {
+  body::before,
+  body::after {
+    width: 300px;
+    height: 300px;
+    opacity: 0.4;
+  }
+}
+
+/* Phones */
+@media (max-width: 575.98px) {
+  #left,
   #right {
-    width: 100%;
-    height: 100%;
+    padding: 1.5rem 1.1rem;
+  }
+
+  .weather-card {
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .pane-inner {
+    max-width: 100%;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .stat-label {
+    font-size: 0.66rem;
+  }
+
+  #history > * {
+    font-size: 0.72rem;
+  }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  #condition {
+    animation: none;
+  }
+
+  .search-box {
+    transition: none;
   }
 }

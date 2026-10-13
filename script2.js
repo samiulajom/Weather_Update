@@ -74,11 +74,18 @@ function kelvinToCelsius(kelvin) {
   return (kelvin - 273.15).toFixed(2).slice(0, 4);
 }
 
+//convert accented / localized letters to plain English (e.g. "Pābna" -> "Pabna")
+function toEnglishText(text) {
+  return String(text)
+    .normalize(`NFD`)
+    .replace(/[\u0300-\u036f]/g, ``);
+}
+
 //innerHTML A INFORMATION ADD
 function setWeather(weather) {
   condition.src = `${ICON_URL}${weather.icon}.png`;
-  city.innerHTML = weather.city;
-  country.innerHTML = weather.country;
+  city.innerHTML = toEnglishText(weather.city);
+  country.innerHTML = toEnglishText(weather.country);
   mainTaxt.innerHTML = weather.main;
   pressure.innerHTML = weather.pressure;
   humidity.innerHTML = weather.humidity;
@@ -86,5 +93,5 @@ function setWeather(weather) {
   //temparature convert
   const tempStore = weather.temp;
   const celsiusTemperature = kelvinToCelsius(tempStore);
-  temp.innerHTML = celsiusTemperature + `°C ,`;
+  temp.innerHTML = celsiusTemperature + `°C`;
 }
